@@ -4,6 +4,7 @@ from flask_restplus import Resource, Api, fields
 from werkzeug.contrib.fixers import ProxyFix
 from database import db_session
 from models import BlogPost
+import urllib.request
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -17,6 +18,14 @@ api = Api(app,
 class HelloWorld(Resource):
     def get(self):
         return {'hello': 'world'}
+
+@api.route('/test_http')
+class HelloWorld(Resource):
+    def get(self):
+          fp = urllib.request.urlopen("http://www.python.org")
+          html = fp.read().decode("utf8")
+          fp.close()
+          return {'html': html}
 
 @api.route('/blog_posts')
 class BlogPosts(Resource):
